@@ -10,5 +10,5 @@ public interface ExoscaleApi {
     @Path("/instance/{id}:start")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    InstanceResponse startInstance(@PathParam("id") String id);
+    InstanceResponse startInstance(@PathParam("id") String id, StartInstanceRequest request);
 }

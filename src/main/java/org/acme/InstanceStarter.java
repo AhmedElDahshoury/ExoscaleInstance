@@ -4,7 +4,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
-
 @ApplicationScoped
 public class InstanceStarter {
 
@@ -12,10 +11,12 @@ public class InstanceStarter {
     @RestClient
     ExoscaleApi exoscaleApi;
 
-    public void startExoscaleInstance(String instanceId, String rescueProfile) {
-        StartInstanceRequest request = new StartInstanceRequest();
-        request.rescueProfile = rescueProfile;
+    @Inject
+    StartInstanceRequestHandler requestHandler;
 
-        InstanceResponse response = exoscaleApi.startInstance(instanceId);
+    public void startExoscaleInstance(String instanceId, String rescueProfile) throws Exception {
+        StartInstanceRequest request = requestHandler.createRequest();
+        InstanceResponse response = exoscaleApi.startInstance(instanceId, request);
     }
 }
+

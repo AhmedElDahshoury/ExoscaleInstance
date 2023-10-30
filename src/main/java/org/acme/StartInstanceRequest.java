@@ -1,5 +1,6 @@
 package org.acme;
 
-public class StartInstanceRequest {
+class StartInstanceRequest {
     public String rescueProfile;
+    public String cloudInit;
 }

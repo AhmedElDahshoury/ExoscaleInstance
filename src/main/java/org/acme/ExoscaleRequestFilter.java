@@ -19,7 +19,7 @@ public class ExoscaleRequestFilter implements ClientRequestFilter {
             String method = requestContext.getMethod();
             String urlPath = requestContext.getUri().getPath();
             String queryString = requestContext.getUri().getQuery() == null ? "" : requestContext.getUri().getQuery();
-            long expiration = System.currentTimeMillis() / 1000 + 3600;  // 1 hour from now
+            long expiration = System.currentTimeMillis() / 1000 + 3600;
 
             String authorizationHeader = ExoscaleAuth.getAuthorizationHeader(method, urlPath, queryString, apiKey, apiSecret, expiration);
             requestContext.getHeaders().add("Authorization", authorizationHeader);
