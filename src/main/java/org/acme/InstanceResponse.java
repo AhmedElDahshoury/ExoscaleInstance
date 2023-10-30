@@ -1,7 +1,5 @@
 package org.acme;
 
-
-
 class InstanceResponse {
     public String id;
     public String reason;
@@ -9,7 +7,7 @@ class InstanceResponse {
     public String message;
     public String state;
 
-    class Reference {
+    static class Reference {
         public String id;
         public String link;
         public String command;

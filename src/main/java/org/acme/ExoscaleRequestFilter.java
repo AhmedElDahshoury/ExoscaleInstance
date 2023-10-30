@@ -7,26 +7,21 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Provider
 public class ExoscaleRequestFilter implements ClientRequestFilter {
-
-
     @ConfigProperty(name = "exoscale.api.key")
     String apiKey;
 
     @ConfigProperty(name = "exoscale.api.secret")
     String apiSecret;
+
     @Override
     public void filter(ClientRequestContext requestContext) {
         try {
             String method = requestContext.getMethod();
             String urlPath = requestContext.getUri().getPath();
-            String requestBody = "";
-            String queryString = "";
-            String headers = "";
-            long expiration = 1599140767;
+            String queryString = requestContext.getUri().getQuery() == null ? "" : requestContext.getUri().getQuery();
+            long expiration = System.currentTimeMillis() / 1000 + 3600;  // 1 hour from now
 
-            String signature = ExoscaleAuth.generateSignature(method, urlPath, requestBody, queryString, headers, expiration, apiSecret);
-            String authorizationHeader = ExoscaleAuth.getAuthorizationHeader(apiKey, expiration, signature);
-
+            String authorizationHeader = ExoscaleAuth.getAuthorizationHeader(method, urlPath, queryString, apiKey, apiSecret, expiration);
             requestContext.getHeaders().add("Authorization", authorizationHeader);
         } catch (Exception e) {
             e.printStackTrace();

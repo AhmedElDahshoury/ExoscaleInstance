@@ -1,7 +1,5 @@
 package org.acme;
 
-
-class StartInstanceRequest {
+public class StartInstanceRequest {
     public String rescueProfile;
 }
-

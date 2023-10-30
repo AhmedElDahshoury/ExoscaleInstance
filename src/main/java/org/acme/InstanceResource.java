@@ -7,7 +7,6 @@ import jakarta.ws.rs.PathParam;
 
 @Path("/start-instance")
 public class InstanceResource {
-
     @Inject
     InstanceStarter instanceStarter;
 
@@ -18,6 +17,3 @@ public class InstanceResource {
         return "Instance start request sent.";
     }
 }
-
-
-

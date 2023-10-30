@@ -5,20 +5,17 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 public class ExoscaleAuth {
-
-    public static String generateSignature(String method, String urlPath, String requestBody,
-                                           String queryString, String headers, long expiration,
-                                           String apiSecret) throws Exception {
-        String message = method + " " + urlPath + "\n" + requestBody + "\n" + queryString + "\n" +
-                headers + "\n" + expiration;
-        Mac sha256Hmac = Mac.getInstance("HmacSHA256");
-        SecretKeySpec secretKey = new SecretKeySpec(apiSecret.getBytes("UTF-8"), "HmacSHA256");
-        sha256Hmac.init(secretKey);
-        byte[] hash = sha256Hmac.doFinal(message.getBytes("UTF-8"));
-        return Base64.getEncoder().encodeToString(hash);
-    }
-
-    public static String getAuthorizationHeader(String apiKey, long expiration, String signature) {
-        return "EXO2-HMAC-SHA256 credential=" + apiKey + ",expires=" + expiration + ",signature=" + signature;
+    public static String getAuthorizationHeader(String method, String urlPath, String queryString,
+                                                String apiKey, String apiSecret, long expiration) throws Exception {
+        String message = method + " " + urlPath + "\n\n" + queryString.replace("&", "") + "\n\n" + expiration;
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(new SecretKeySpec(apiSecret.getBytes(), "HmacSHA256"));
+        byte[] signatureBytes = mac.doFinal(message.getBytes());
+        String signature = Base64.getEncoder().encodeToString(signatureBytes);
+        return "EXO2-HMAC-SHA256 "
+                + "credential=" + apiKey + ","
+                + "signed-query-args=" + queryString.replace("=", "").replace("&", ";") + ","
+                + "expires=" + expiration + ","
+                + "signature=" + signature;
     }
 }

@@ -16,6 +16,6 @@ public class InstanceStarter {
         StartInstanceRequest request = new StartInstanceRequest();
         request.rescueProfile = rescueProfile;
 
-        InstanceResponse response = exoscaleApi.startInstance(instanceId, request);
+        InstanceResponse response = exoscaleApi.startInstance(instanceId);
     }
 }
